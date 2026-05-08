@@ -1,0 +1,71 @@
+{
+  "name": "google-maps-lead-finder",
+  "version": "1.0.0",
+  "description": "Advanced lead search system using Google Maps/Places API",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "setup": "tsx src/setup.ts",
+    "config": "tsx src/config/wizard.ts",
+    "dev": "tsx watch src/cli.ts",
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "lint": "eslint src/**/*.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "dashboard": "tsx src/dashboard/server.ts",
+    "export": "tsx src/cli.ts export",
+    "search": "tsx src/cli.ts search",
+    "stats": "tsx src/cli.ts stats",
+    "cleanup": "tsx src/cli.ts cleanup"
+  },
+  "keywords": [
+    "google-maps",
+    "leads",
+    "scraping",
+    "places-api",
+    "business-intelligence"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "axios-retry": "^4.0.0",
+    "chalk": "^5.3.0",
+    "cheerio": "^1.0.0-rc.12",
+    "commander": "^12.1.0",
+    "conf": "^12.0.0",
+    "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "google-auth-library": "^9.6.3",
+    "google-spreadsheet": "^4.1.1",
+    "inquirer": "^9.2.23",
+    "json2csv": "^5.0.0",
+    "ora": "^8.0.1",
+    "p-limit": "^5.0.0",
+    "proxy-from-env": "^1.1.0",
+    "puppeteer": "^21.11.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "table": "^6.8.2",
+    "winston": "^3.12.0",
+    "xlsx": "^0.18.5",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.11.16",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

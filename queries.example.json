@@ -1,0 +1,20 @@
+[
+  {
+    "keyword": "restaurants",
+    "location": "New York, NY",
+    "radius": 5000,
+    "maxResults": 50
+  },
+  {
+    "keyword": "coffee shops",
+    "location": "Brooklyn, NY",
+    "radius": 3000,
+    "maxResults": 30
+  },
+  {
+    "keyword": "gyms",
+    "location": "Manhattan, NY",
+    "radius": 4000,
+    "maxResults": 40
+  }
+]

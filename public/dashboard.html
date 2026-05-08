@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadFinder Pro - Google Maps Lead Generation</title>
+  <style>
+    :root {
+      --primary: #1a1a2e;
+      --secondary: #16213e;
+      --accent: #0f4c75;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --light: #f8f9fa;
+      --dark: #343a40;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      color: var(--primary);
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: var(--dark);
+      font-size: 1.1em;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card h3 {
+      color: var(--dark);
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 1.5em;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: #f5f5f5;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+
+    .alert {
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .alert-info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border-left: 4px solid #0f4c75;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      border: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .pricing-card.featured {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .pricing-card h3 {
+      font-size: 1.5em;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 3em;
+      font-weight: bold;
+      color: var(--accent);
+      margin: 20px 0;
+    }
+
+    .price span {
+      font-size: 0.3em;
+      color: var(--dark);
+    }
+
+    .features {
+      list-style: none;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .features li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .features li:before {
+      content: "✓ ";
+      color: var(--success);
+      font-weight: bold;
+    }
+  </style>
+<style>
+/* =========================================
+   CINEMATIC GLASS DESIGN SYSTEM
+   ========================================= */
+body.cinematic-glass-theme {
+    background-color: #050508 !important;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%) !important;
+    background-attachment: fixed !important;
+    color: #f8fafc !important;
+}
+
+.cinematic-glass-theme .card, 
+.cinematic-glass-theme .panel, 
+.cinematic-glass-theme .glass-panel, 
+.cinematic-glass-theme .navbar, 
+.cinematic-glass-theme .nav, 
+.cinematic-glass-theme footer,
+.cinematic-glass-theme .footer,
+.cinematic-glass-theme .product-card,
+.cinematic-glass-theme .service-card,
+.cinematic-glass-theme .feature-card,
+.cinematic-glass-theme .stat-card,
+.cinematic-glass-theme .modal-content,
+.cinematic-glass-theme .about-image {
+    background: rgba(15, 15, 25, 0.55) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 16px !important;
+    color: #f1f5f9 !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.cinematic-glass-theme .card:hover, 
+.cinematic-glass-theme .product-card:hover, 
+.cinematic-glass-theme .service-card:hover, 
+.cinematic-glass-theme .feature-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.cinematic-glass-theme h1, 
+.cinematic-glass-theme h2, 
+.cinematic-glass-theme h3,
+.cinematic-glass-theme h4,
+.cinematic-glass-theme h5,
+.cinematic-glass-theme h6 {
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+}
+
+.cinematic-glass-theme p, 
+.cinematic-glass-theme span, 
+.cinematic-glass-theme a,
+.cinematic-glass-theme li {
+    color: #cbd5e1 !important;
+}
+
+.cinematic-glass-theme button, 
+.cinematic-glass-theme .btn,
+.cinematic-glass-theme .btn-primary {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(168, 85, 247, 0.8)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.cinematic-glass-theme button:hover, 
+.cinematic-glass-theme .btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.cinematic-glass-theme input, 
+.cinematic-glass-theme textarea, 
+.cinematic-glass-theme select {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+}
+.cinematic-glass-theme input:focus, 
+.cinematic-glass-theme textarea:focus {
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    outline: none !important;
+}
+</style>
+</head>
+<body class="cinematic-glass-theme">
+  <div class="container">
+    <div class="header">
+      <h1>🗺️ LeadFinder Pro</h1>
+      <p>Generate high-quality leads from Google Maps with advanced filtering and scoring</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Leads</h3>
+        <div class="stat-value" id="totalLeads">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>Average Rating</h3>
+        <div class="stat-value" id="avgRating">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>With Email</h3>
+        <div class="stat-value" id="withEmail">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>With Website</h3>
+        <div class="stat-value" id="withWebsite">-</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🚀 Start New Search</h2>
+      <div class="alert alert-info">
+        <strong>Pro Tip:</strong> Combine multiple keywords and locations to build comprehensive lead lists. Each search costs ~$0.017 per 1000 results.
+      </div>
+      <form id="searchForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Keyword *</label>
+            <input type="text" name="query" placeholder="e.g., restaurants, dentists, plumbers" required>
+          </div>
+          <div class="form-group">
+            <label>Location *</label>
+            <input type="text" name="location" placeholder="e.g., New York, NY" required>
+          </div>
+          <div class="form-group">
+            <label>Radius (meters)</label>
+            <input type="number" name="radius" value="5000" min="100" max="50000">
+          </div>
+          <div class="form-group">
+            <label>Max Results</label>
+            <input type="number" name="max" value="100" min="1" max="200">
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button type="submit" class="btn btn-primary" id="searchBtn">🔍 Start Search</button>
+          <button type="button" class="btn btn-success" onclick="exportLeads()">📥 Export Leads</button>
+          <div id="searchStatus"></div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>📊 Recent Leads</h2>
+      <div style="margin-bottom: 15px;">
+        <label>
+          <input type="checkbox" id="filterEmail"> Has Email
+        </label>
+        <label style="margin-left: 15px;">
+          <input type="checkbox" id="filterWebsite"> Has Website
+        </label>
+        <select id="sortBy" style="margin-left: 15px; padding: 8px;">
+          <option value="score">Sort by Score</option>
+          <option value="rating">Sort by Rating</option>
+          <option value="reviews">Sort by Reviews</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Rating</th>
+            <th>Score</th>
+            <th>Email</th>
+            <th>Website</th>
+          </tr>
+        </thead>
+        <tbody id="leadsBody">
+          <tr><td colspan="7" style="text-align: center;">Loading leads...</td></tr>
+        </tbody>
+      </table>
+      <div id="pagination" style="margin-top: 20px; text-align: center;"></div>
+    </div>
+
+    <div class="card">
+      <h2>💰 Pricing Plans</h2>
+      <p style="margin-bottom: 20px; color: var(--dark);">Sell lead lists or offer lead generation services using this tool.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Starter</h3>
+          <div class="price">$49<span>/month</span></div>
+          <ul class="features">
+            <li>500 Leads per month</li>
+            <li>Basic filtering</li>
+            <li>CSV Export</li>
+            <li>Email support</li>
+          </ul>
+          <button class="btn btn-primary">Get Started</button>
+        </div>
+        <div class="pricing-card featured">
+          <h3>Professional</h3>
+          <div class="price">$99<span>/month</span></div>
+          <ul class="features">
+            <li>2,000 Leads per month</li>
+            <li>Advanced scoring</li>
+            <li>Email extraction</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="btn btn-primary">Most Popular</button>
+        </div>
+        <div class="pricing-card">
+          <h3>Agency</h3>
+          <div class="price">$299<span>/month</span></div>
+          <ul class="features">
+            <li>Unlimited leads</li>
+            <li>White-label reports</li>
+            <li>API access</li>
+            <li>Dedicated support</li>
+          </ul>
+          <button class="btn btn-primary">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    const pageSize = 20;
+
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('totalLeads').textContent = data.data.totalLeads || 0;
+          document.getElementById('avgRating').textContent = data.data.averageRating?.toFixed(1) || 'N/A';
+          document.getElementById('withEmail').textContent = data.data.withEmail || 0;
+          document.getElementById('withWebsite').textContent = data.data.withWebsite || 0;
+        }
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+
+    async function loadLeads(page = 1) {
+      const filterEmail = document.getElementById('filterEmail').checked;
+      const filterWebsite = document.getElementById('filterWebsite').checked;
+      const sortBy = document.getElementById('sortBy').value;
+
+      let url = `/api/leads?limit=${pageSize}&offset=${(page - 1) * pageSize}&sortBy=${sortBy}&sortOrder=DESC`;
+      if (filterEmail) url += '&hasEmail=true';
+      if (filterWebsite) url += '&hasWebsite=true';
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.success) {
+          renderLeads(data.data);
+          renderPagination(page, Math.ceil(data.meta.total / pageSize));
+        }
+      } catch (err) {
+        console.error('Failed to load leads:', err);
+      }
+    }
+
+    function renderLeads(leads) {
+      const tbody = document.getElementById('leadsBody');
+      if (leads.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No leads found. Start a search!</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = leads.map(lead => `
+        <tr>
+          <td><strong>${escapeHtml(lead.name)}</strong></td>
+          <td>${lead.address ? escapeHtml(lead.address) : '-'}</td>
+          <td>${lead.phone || '-'}</td>
+          <td>${lead.rating ? '⭐ ' + lead.rating : '-'}</td>
+          <td><span class="badge ${getScoreBadge(lead.score)}">${lead.score?.toFixed(1) || '0.0'}</span></td>
+          <td>${lead.email ? '<span class="badge badge-success">✓</span>' : '<span class="badge badge-danger">✗</span>'}</td>
+          <td>${lead.website ? `<a href="${escapeHtml(lead.website)}" target="_blank" style="color: var(--accent);">Visit</a>` : '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function getScoreBadge(score) {
+      if (!score || score < 30) return 'badge-danger';
+      if (score < 70) return 'badge-warning';
+      return 'badge-success';
+    }
+
+    function renderPagination(current, total) {
+      const container = document.getElementById('pagination');
+      let html = '';
+      for (let i = 1; i <= Math.min(total, 10); i++) {
+        html += `<button onclick="loadLeads(${i})" style="margin: 0 5px; padding: 8px 12px; border: none; background: ${i === current ? 'var(--accent)' : '#e0e0e0'); color: ${i === current ? 'white' : 'black'); border-radius: 5px; cursor: pointer;">${i}</button>`;
+      }
+      container.innerHTML = html;
+    }
+
+    document.getElementById('searchForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('searchBtn');
+      const status = document.getElementById('searchStatus');
+
+      const queries = [{
+        keyword: form.query.value,
+        location: form.location.value,
+        radius: parseInt(form.radius.value),
+        type: ''
+      }];
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Searching...';
+      status.innerHTML = '<span class="badge badge-warning">In Progress</span>';
+
+      try {
+        const res = await fetch('/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ queries, maxResults: parseInt(form.max.value), enrich: true })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          status.innerHTML = '<span class="badge badge-success">Started!</span>';
+          setTimeout(() => {
+            loadStats();
+            loadLeads();
+          }, 3000);
+        } else {
+          status.innerHTML = '<span class="badge badge-danger">Error</span>';
+        }
+      } catch (err) {
+        status.innerHTML = '<span class="badge badge-danger">Network Error</span>';
+      } finally {
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = '🔍 Start Search';
+        }, 2000);
+      }
+    });
+
+    async function exportLeads() {
+      const format = confirm('Export as XLSX? Click OK for XLSX, Cancel for CSV') ? 'xlsx' : 'csv';
+      try {
+        const res = await fetch('/api/export', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ format, includeScrapedData: true })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`Exported ${data.data.count} leads to ${data.data.filename}`);
+        } else {
+          alert('Export failed: ' + data.error);
+        }
+      } catch (err) {
+        alert('Export failed');
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.getElementById('filterEmail').addEventListener('change', () => loadLeads(1));
+    document.getElementById('filterWebsite').addEventListener('change', () => loadLeads(1));
+    document.getElementById('sortBy').addEventListener('change', () => loadLeads(1));
+
+    loadStats();
+    loadLeads();
+    setInterval(() => { loadStats(); loadLeads(currentPage); }, 30000);
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,70 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+build/
+*.js.map
+*.d.ts
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database
+data/*.db
+data/*.db-*
+data/*.journal
+
+# Logs
+logs/*.log
+logs/*.log.*
+
+# Exports
+exports/*
+!exports/.gitkeep
+
+# Config
+config/proxies.txt
+config/*.json
+!config/.gitkeep
+
+# Screenshots
+screenshots/
+*.png
+*.jpg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+.ruff_cache/
+__pycache__/
+
+# Credentials
+*.pem
+*.key
+*.crt
+secrets/
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# Coverage
+coverage/
+.coverage
+.nyc_output
